@@ -1,0 +1,43 @@
+import java.io.FileNotFoundException;
+import java.util.*;
+
+public class Files {
+    private static Formatter output;
+    public static void main(String[] args) {
+        OpenFile();
+        addRecord();
+        CloseFile();
+    }
+
+    public static void OpenFile() {
+        try {
+            output = new Formatter("person.txt");
+        } catch (SecurityException e ) {
+            System.out.println("Permission denied");
+            System.exit(1);
+        } catch (FileNotFoundException e ) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
+    }
+
+    public static void addRecord() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Please enter Name, age, and phone number");
+        while(input.hasNext()) {
+            try {
+                String name = input.next();
+                int age = input.nextInt();
+                String phoneNumber = input.next();
+                output.format(name, age, phoneNumber);
+            } catch (FormatterClosedException | NoSuchElementException e) {
+                System.err.println(e.getMessage() + "Please try again");
+            } 
+        }
+    }
+    public static void CloseFile() {
+        if (output != null) {
+            output.close();
+        }
+    }
+}
